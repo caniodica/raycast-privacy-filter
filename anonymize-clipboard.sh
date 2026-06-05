@@ -2,31 +2,31 @@
 
 # Required parameters:
 # @raycast.schemaVersion 1
-# @raycast.title Anonimizza testo
+# @raycast.title Anonymize text
 # @raycast.mode fullOutput
 
 # Optional parameters:
 # @raycast.icon 🔒
-# @raycast.description Anonimizza il testo negli appunti con OpenAI Privacy Filter (locale)
+# @raycast.description Anonymize the clipboard text with OpenAI Privacy Filter (local)
 # @raycast.packageName Privacy
 
-# Trova la directory dello script per usare il .venv locale
+# Find the script directory to use the local .venv
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 VENV_OPF="$SCRIPT_DIR/.venv/bin/opf"
 
-# Fallback al PATH di sistema se non c'è il .venv
+# Fall back to the system PATH if there is no .venv
 if [ ! -f "$VENV_OPF" ]; then
   if command -v opf &> /dev/null; then
     VENV_OPF=$(which opf)
   else
-    echo "❌ 'opf' non trovato."
+    echo "❌ 'opf' not found."
     echo ""
-    echo "Installa OpenAI Privacy Filter:"
-    echo "  Con .venv (consigliato):"
+    echo "Install OpenAI Privacy Filter:"
+    echo "  With .venv (recommended):"
     echo "    python3 -m venv $SCRIPT_DIR/.venv"
     echo "    $SCRIPT_DIR/.venv/bin/pip install git+https://github.com/openai/privacy-filter"
     echo ""
-    echo "  Nel Python di sistema:"
+    echo "  In the system Python:"
     echo "    pip3 install git+https://github.com/openai/privacy-filter"
     exit 1
   fi
@@ -35,26 +35,26 @@ fi
 INPUT=$(pbpaste)
 
 if [ -z "$INPUT" ]; then
-  echo "❌ Gli appunti sono vuoti. Copia del testo prima di eseguire lo script."
+  echo "❌ The clipboard is empty. Copy some text before running the script."
   exit 1
 fi
 
-echo "📋 Testo originale:"
+echo "📋 Original text:"
 echo "$INPUT"
 echo ""
-echo "⏳ Analisi in corso..."
+echo "⏳ Analyzing..."
 echo ""
 
 RESULT=$(echo "$INPUT" | "$VENV_OPF" --device cpu 2>/dev/null)
 
 if [ $? -ne 0 ] || [ -z "$RESULT" ]; then
-  echo "❌ Errore durante l'anonimizzazione."
+  echo "❌ Error during anonymization."
   exit 1
 fi
 
-echo "🔒 Testo anonimizzato:"
+echo "🔒 Anonymized text:"
 echo "$RESULT"
 
 echo "$RESULT" | pbcopy
 echo ""
-echo "✅ Testo anonimizzato copiato negli appunti!"
+echo "✅ Anonymized text copied to the clipboard!"

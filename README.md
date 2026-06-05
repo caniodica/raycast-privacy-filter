@@ -1,21 +1,21 @@
 # raycast-privacy-filter
 
-Uno script [Raycast](https://www.raycast.com/) che anonimizza il testo negli appunti usando [OpenAI Privacy Filter](https://github.com/openai/privacy-filter) — un modello locale da 1.5B parametri per il rilevamento e la mascheratura di dati personali (PII).
+A [Raycast](https://www.raycast.com/) script that anonymizes the text in your clipboard using [OpenAI Privacy Filter](https://github.com/openai/privacy-filter) — a local 1.5B-parameter model for detecting and masking personal data (PII).
 
-Il modello gira **interamente in locale**, senza inviare dati a nessun server esterno.
+The model runs **entirely locally**, without sending data to any external server.
 
 ---
 
-## Come funziona
+## How it works
 
-1. Copi del testo negli appunti
-2. Lanci lo script da Raycast
-3. Lo script rileva automaticamente nomi, indirizzi, email, telefoni, date, URL e altri dati sensibili
-4. Restituisce il testo anonimizzato e lo ricopia negli appunti
+1. Copy some text to the clipboard
+2. Run the script from Raycast
+3. The script automatically detects names, addresses, emails, phone numbers, dates, URLs, and other sensitive data
+4. It returns the anonymized text and copies it back to the clipboard
 
-### Categorie di PII rilevate
+### Detected PII categories
 
-| Categoria | Esempio |
+| Category | Example |
 |---|---|
 | `private_person` | Mario Rossi |
 | `private_address` | Via Roma 12, Milano |
@@ -24,37 +24,37 @@ Il modello gira **interamente in locale**, senza inviare dati a nessun server es
 | `private_date` | 01/01/1990 |
 | `private_url` | https://profilo.esempio.com/mario |
 | `account_number` | IT60X0542811101000000123456 |
-| `secret` | password, token, chiavi API |
+| `secret` | passwords, tokens, API keys |
 
 ---
 
-## Requisiti
+## Requirements
 
-- macOS con [Raycast](https://www.raycast.com/) installato
+- macOS with [Raycast](https://www.raycast.com/) installed
 - Python 3.8+
-- ~3 GB di spazio libero (per il modello, scaricato automaticamente al primo avvio)
+- ~3 GB of free disk space (for the model, downloaded automatically on first run)
 
 ---
 
-## Installazione
+## Installation
 
-### 1. Clona la repo nella cartella degli script Raycast
+### 1. Clone the repo into your Raycast scripts folder
 
-Apri Raycast → `Extensions` → `Script Commands` → annota la tua cartella degli script, poi:
+Open Raycast → `Extensions` → `Script Commands` → note your scripts folder, then:
 
 ```bash
-cd /path/alla/tua/cartella-script-raycast
-git clone https://github.com/TUO_USERNAME/raycast-privacy-filter
+cd /path/to/your/raycast-scripts-folder
+git clone https://github.com/YOUR_USERNAME/raycast-privacy-filter
 cd raycast-privacy-filter
 ```
 
-### 2. Installa OpenAI Privacy Filter
+### 2. Install OpenAI Privacy Filter
 
-Scegli uno dei metodi:
+Choose one of the following methods:
 
-#### Opzione A — Virtual environment (consigliato)
+#### Option A — Virtual environment (recommended)
 
-Isola le dipendenze nella cartella dello script, senza toccare il Python di sistema:
+Isolates the dependencies inside the script folder, without touching the system Python:
 
 ```bash
 python3 -m venv .venv
@@ -62,53 +62,59 @@ python3 -m venv .venv
 .venv/bin/pip install git+https://github.com/openai/privacy-filter
 ```
 
-Lo script rileva automaticamente `.venv/bin/opf` se presente.
+The script automatically detects `.venv/bin/opf` if present.
 
-#### Opzione B — Python di sistema
+#### Option B — System Python
 
 ```bash
 pip3 install git+https://github.com/openai/privacy-filter
 ```
 
-Lo script fa automaticamente il fallback a `opf` nel PATH se non trova il `.venv`.
+The script automatically falls back to `opf` in the PATH if no `.venv` is found.
 
-#### Opzione C — Homebrew Python
+#### Option C — Homebrew Python
 
-Se usi Python installato via Homebrew:
+If you use Python installed via Homebrew:
 
 ```bash
 /opt/homebrew/bin/pip3 install git+https://github.com/openai/privacy-filter
 ```
 
-### 3. Rendi lo script eseguibile
+### 3. Make the script executable
 
 ```bash
 chmod +x anonymize-clipboard.sh
 ```
 
-### 4. Aggiungi lo script a Raycast
+### 4. Add the script to Raycast
 
-Se hai clonato la repo dentro la cartella degli script Raycast esistente, Raycast la rileverà automaticamente. Altrimenti:
+If you cloned the repo inside your existing Raycast scripts folder, Raycast will detect it automatically. Otherwise:
 
-- Raycast → `Extensions` → `Script Commands` → `Add Script Directory` → seleziona la cartella `raycast-privacy-filter`
+- Raycast → `Extensions` → `Script Commands` → `Add Script Directory` → select the `raycast-privacy-filter` folder
 
-### 5. Primo avvio
+### 5. First run
 
-Al primo utilizzo, il modello (~3 GB) viene scaricato automaticamente in `~/.opf/privacy_filter`. Potrebbero volerci alcuni minuti. Le esecuzioni successive saranno immediate.
+On first use, the model (~3 GB) is automatically downloaded to `~/.opf/privacy_filter`. This may take a few minutes. Subsequent runs will be instant.
 
 ---
 
-## Utilizzo
+## Usage
 
-1. Seleziona e copia del testo (`⌘C`)
-2. Apri Raycast (`⌥Space`) e cerca **"Anonimizza testo"**
-3. Premi `↵`
+1. Select and copy some text (`⌘ C`)
+2. Open Raycast (`⌥ Space`) and search for **"Anonymize text"**
+3. Press `↵`
 
-L'output mostra il testo originale e quello anonimizzato. Il testo anonimizzato viene automaticamente copiato negli appunti.
+The output shows the original text and the anonymized one. The anonymized text is automatically copied to the clipboard.
 
-### Esempio
+Alternatively, you can assign a hotkey to trigger the script directly:
+1. Open Raycast (`⌥ Space`)
+2. Open the settings `⌘ ⇧ ,` (Cmd + Shift + ,)
+3. Search for **"Anonymize text"** and assign it a shortcut
+4. Use it with `⌘ C` followed immediately by the shortcut
 
-**Input (negli appunti):**
+### Example
+
+**Input (in the clipboard):**
 ```
 Gentile Mario Rossi,
 la sua visita è confermata per il 15 marzo 1990.
@@ -124,16 +130,16 @@ Può contattarci al [REDACTED] o via email a [REDACTED].
 
 ---
 
-## Note
+## Notes
 
-- Lo script usa `--device cpu` per compatibilità massima su Mac. Se hai una GPU supportata, puoi rimuovere quel flag per maggiore velocità.
-- Il modello è ottimizzato principalmente per testo in inglese. Le performance su italiano e altre lingue sono buone ma possono variare.
-- Privacy Filter è uno strumento di supporto, non una garanzia di anonimizzazione completa. Per contesti ad alto rischio (medico, legale, finanziario), è consigliata una revisione umana.
+- The script uses `--device cpu` for maximum compatibility on Mac. If you have a supported GPU, you can remove that flag for better performance.
+- The model is primarily optimized for English text. Performance on Italian and other languages is good but may vary.
+- Privacy Filter is a supporting tool, not a guarantee of complete anonymization. For high-risk contexts (medical, legal, financial), human review is recommended.
 
 ---
 
-## Licenza
+## License
 
-MIT — vedi [LICENSE](LICENSE)
+MIT — see [LICENSE](LICENSE)
 
-OpenAI Privacy Filter è rilasciato sotto licenza [Apache 2.0](https://github.com/openai/privacy-filter/blob/main/LICENSE).
+OpenAI Privacy Filter is released under the [Apache 2.0](https://github.com/openai/privacy-filter/blob/main/LICENSE) license.
