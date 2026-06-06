@@ -123,9 +123,9 @@ Può contattarci al +39 02 1234567 o via email a mario.rossi@email.it.
 
 **Output:**
 ```
-Gentile [REDACTED],
-la sua visita è confermata per il [REDACTED].
-Può contattarci al [REDACTED] o via email a [REDACTED].
+Gentile <PRIVATE_PERSON>,
+la sua visita è confermata per il <PRIVATE_DATE>.
+Può contattarci al <PRIVATE_PHONE> o via email a <PRIVATE_EMAIL>.
 ```
 
 ---
